@@ -10,9 +10,10 @@
 import {GLTFLoader} from './GLTFLoader.js'
 
 var scene, camera, renderer, mesh;
-var fan;
+var fan, door;
 
 var fanLoaded = false;
+var doorLoaded = false;
 
 
 var keyboard = {};
@@ -67,6 +68,7 @@ function init(){
             if(o.name === "Cube.001_2" || o.name === "Cube.001_1" ){
                 o.castShadow = true;
                 o.receiveShadow = false;
+                o.AmbientLight = true;
             }
         } 
         });
@@ -107,6 +109,21 @@ function init(){
         console.error( error );
     });
     
+    loader.load('models/door1.gltf', function(gltf) {
+        door = gltf.scene;
+        door.traverse((a) => {
+            if (a.isMesh) {
+                a.material.roughness = 1;
+                a.receiveShadow = true;
+                a.castShadow = true;
+            }
+        });
+        scene.add(door);
+        doorLoaded = true;
+        console.log(door);
+    }, undefined, function(error){
+        console.log(error);
+    });
 
     animate();
 }
@@ -141,13 +158,18 @@ function animate(){
         camera.position.z += -Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
     }
 
-
     if(keyboard[37]){
         camera.rotation.y -= Math.PI * 0.01;
     }
 
     if(keyboard[39]){
         camera.rotation.y += Math.PI * 0.01;
+    }
+    if(keyboard[69] && doorLoaded) { // Open door E
+        door.rotation.x += 0.05;
+    }
+    if(keyboard[81] && doorLoaded) { // Open door Q
+        door.rotation.x -= 0.02;
     }
 }
 
