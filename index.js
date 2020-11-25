@@ -118,9 +118,12 @@ function init(){
                 a.castShadow = true;
             }
         });
+        // Door position, to entrance
+        door.position.x = 11.15;
+        door.position.y = -1.5;
+        door.position.z = -23.5;
         scene.add(door);
         doorLoaded = true;
-        console.log(door);
     }, undefined, function(error){
         console.log(error);
     });
@@ -166,10 +169,10 @@ function animate(){
         camera.rotation.y += Math.PI * 0.01;
     }
     if(keyboard[69] && doorLoaded) { // Open door E
-        door.rotation.x += 0.05;
+        door.rotation.y += 0.05;
     }
     if(keyboard[81] && doorLoaded) { // Open door Q
-        door.rotation.x -= 0.02;
+        door.rotation.y -= 0.05;
     }
 }
 
