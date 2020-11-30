@@ -103,30 +103,33 @@ function init(){
     }, undefined, function ( error ) {
         console.error( error );
     });
+
+    // Carga la imagen como textura y la mete dentro de un material
     var material;
     new THREE.TextureLoader().load('textured/door.jpg', 
     function(text) {
-        material = new THREE.MeshBasicMaterial({map: text});
+        material = new THREE.MeshBasicMaterial({map: text}); // Se declara el material
     },
     undefined,
     function (err) { console.error(err); }
     );
-    loader.load('models/door1.gltf', function(gltf) {
+    // Load door object
+    loader.load('models/door1.gltf', function(gltf) { 
         door = gltf.scene;
         door.traverse((a) => {
-            if (a.isMesh) {
+            if (a.isMesh) { // Activa valores para mostrar la puerta
                 a.material.roughness = 1;
                 a.receiveShadow = true;
                 a.castShadow = true;
-                a.material = material;
+                a.material = material; // Agrega la textura anterior a la puerta
             }
         });
-        // Door position, to entrance
+        // Inicializa la posicion de la puerta, en la entrada de la casa
         door.position.x = 11.15;
         door.position.y = -1.5;
         door.position.z = -23.5;
-        scene.add(door);
-        doorLoaded = true;
+        scene.add(door); // Agrega la puerta a la escena
+        doorLoaded = true; // Auxiliar que avisa si se cargo el objecto puerta
     }, undefined, function(error){
         console.error(error);
     });
@@ -171,11 +174,11 @@ function animate(){
     if(keyboard[39]){
         camera.rotation.y += Math.PI * 0.01;
     }
-    if(keyboard[69] && doorLoaded) { // Open door E
-        door.rotation.y += 0.05;
+    if(keyboard[69] && doorLoaded) { // Presiona la tecla E y el obj de la puerta cargada
+        door.rotation.y += 0.05; // Rota la puerta hacia afuera de la casa 
     }
-    if(keyboard[81] && doorLoaded) { // Open door Q
-        door.rotation.y -= 0.05;
+    if(keyboard[81] && doorLoaded) { // presiona la tecla Q y el obj de la puerta cargado
+        door.rotation.y -= 0.05; // Rota la puerta hacia dentro de la casa
     }
 }
 
