@@ -45,7 +45,6 @@ function init(){
     lightHouse.castShadow = true;
     lightHouse.shadowMapVisible = true;
     scene.add(lightHouse);
-    console.log(lightHouse);
     
     var sunLight = new THREE.PointLight(0xc4c4c4,1.5);
     sunLight.position.set(-0.8,50,0);
@@ -60,9 +59,7 @@ function init(){
         var model = gltf.scene;
         model.traverse((o) => {
         if (o.isMesh){
-            //console.log(o);
             o.material.roughness = 1;
-            //console.log(o.name);
             o.receiveShadow = true;
             
             if(o.name === "Cube.001_2" || o.name === "Cube.001_1" ){
@@ -74,7 +71,7 @@ function init(){
         });
         scene.add(model)
     }, undefined, function ( error ) {
-        //console.error( error );
+        console.error( error );
     });
 
 
@@ -82,8 +79,6 @@ function init(){
         fan = gltf.scene;
         fan.traverse((o) => {
         if (o.isMesh){
-            //console.log(o);
-            //console.log(o.name);
             o.castShadow = true;
 
         } 
@@ -108,7 +103,14 @@ function init(){
     }, undefined, function ( error ) {
         console.error( error );
     });
-    
+    var material;
+    new THREE.TextureLoader().load('textured/door.jpg', 
+    function(text) {
+        material = new THREE.MeshBasicMaterial({map: text});
+    },
+    undefined,
+    function (err) { console.error(err); }
+    );
     loader.load('models/door1.gltf', function(gltf) {
         door = gltf.scene;
         door.traverse((a) => {
@@ -116,6 +118,7 @@ function init(){
                 a.material.roughness = 1;
                 a.receiveShadow = true;
                 a.castShadow = true;
+                a.material = material;
             }
         });
         // Door position, to entrance
@@ -125,7 +128,7 @@ function init(){
         scene.add(door);
         doorLoaded = true;
     }, undefined, function(error){
-        console.log(error);
+        console.error(error);
     });
 
     animate();
@@ -183,7 +186,6 @@ function keyDown(event){
 
 function keyUp(event){
     keyboard[event.keyCode] = false;
-    console.log("x " + camera.position.x + " z " + camera.position.z);
 }
 
 window.addEventListener('keydown', keyDown);
